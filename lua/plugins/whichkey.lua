@@ -1,0 +1,25 @@
+return {
+	"folke/which-key.nvim",
+	event = "VeryLazy",
+	opts = {
+		layout = {
+			height = { min = 4, max = 25 },
+			width = { min = 20, max = 80 },
+		},
+		window = {
+			border = "rounded",
+		},
+		scroll = {
+			enabled = true,
+		},
+	},
+	keys = {
+		{
+			"<leader>?",
+			function()
+				require("which-key").show({ global = false })
+			end,
+			desc = "Buffer Local Keymaps (which-key)",
+		},
+	},
+}
