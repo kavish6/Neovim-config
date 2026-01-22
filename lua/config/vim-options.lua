@@ -44,9 +44,6 @@ vim.o.inccommand = "split"
 -- Show which line your cursor is on
 vim.o.cursorline = true
 
--- Minimal number of screen lines to keep above and below the cursor.
-vim.o.scrolloff = 10
-
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
@@ -72,6 +69,10 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 vim.opt.wrap = true
+vim.opt.scrolloff = 8
+vim.opt.sidescrolloff = 999
+vim.opt.sidescroll = 1
+vim.opt.smoothscroll = false
 
 -- Custom keymaps
 --- =========================
@@ -102,7 +103,7 @@ keymap("n", "<C-k>", "<C-w>k", opts)
 keymap("n", "<C-l>", "<C-w>l", opts)
 
 -- Clear search highlight
-keymap("n", "<leader>h", "<cmd>nohlsearch<cr>", opts)
+keymap("n", "<leader>nh", "<cmd>nohlsearch<cr>", opts)
 
 -- =========================
 -- System Clipboard Mappings
