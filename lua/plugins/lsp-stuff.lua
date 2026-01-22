@@ -1,81 +1,109 @@
 return {
-	"neovim/nvim-lspconfig",
-	dependencies = {
-		{ "mason-org/mason.nvim", opts = {} },
-		"mason-org/mason-lspconfig.nvim",
-		"WhoIsSethDaniel/mason-tool-installer.nvim",
-		{ "j-hui/fidget.nvim", opts = {} },
+
+	{
 		"saghen/blink.cmp",
-		"nvim-telescope/telescope.nvim",
-	},
+		version = "1.*",
+		lazy = false,
+		opts = {
+			keymap = {
+				preset = "default",
 
-	config = function()
-		--------------------------------------------------
-		-- LSP Attach (Keymaps + buffer-local config)
-		--------------------------------------------------
-		vim.api.nvim_create_autocmd("LspAttach", {
-			group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
-			callback = function(event)
-				local map = function(keys, func, desc, mode)
-					mode = mode or "n"
-					vim.keymap.set(mode, keys, func, {
-						buffer = event.buf,
-						desc = "LSP: " .. desc,
-					})
-				end
+				["<Tab>"] = { "select_next", "fallback" }, -- select next item, fallback if menu closed
+				["<S-Tab>"] = { "select_prev", "fallback" }, -- select previous item, fallback if menu closed
+				["<CR>"] = { "accept" }, -- confirm selection
+			},
 
-				map("grn", vim.lsp.buf.rename, "Rename")
-				map("<leader>ca", vim.lsp.buf.code_action, "Code Action", { "n", "x" })
-				map("gr", require("telescope.builtin").lsp_references, "References")
-				map("gi", require("telescope.builtin").lsp_implementations, "Implementation")
-				map("gd", require("telescope.builtin").lsp_definitions, "Definition")
-				map("gD", vim.lsp.buf.declaration, "Declaration")
-				map("gO", require("telescope.builtin").lsp_document_symbols, "Document Symbols")
-				map("gW", require("telescope.builtin").lsp_dynamic_workspace_symbols, "Workspace Symbols")
-				map("gt", require("telescope.builtin").lsp_type_definitions, "Type Definition")
-				map("K", vim.lsp.buf.hover, "Hover")
-			end,
-		})
-
-		--------------------------------------------------
-		-- Capabilities (blink.cmp)
-		--------------------------------------------------
-		local capabilities = require("blink.cmp").get_lsp_capabilities()
-
-		--------------------------------------------------
-		-- LSP Servers
-		--------------------------------------------------
-		local servers = {
-			lua_ls = {
-				settings = {
-					Lua = {
-						completion = { callSnippet = "Replace" },
-						diagnostics = { disable = { "missing-fields" } },
+			completion = {
+				list = {
+					selection = {
+						preselect = false,
+						auto_insert = false,
 					},
 				},
 			},
-			tsgo = {},
-		}
 
-		--------------------------------------------------
-		-- Mason Tool Installer
-		--------------------------------------------------
-		require("mason-tool-installer").setup({
-			ensure_installed = vim.tbl_keys(servers),
-		})
+			fuzzy = { implementation = "lua" },
+		},
+	},
 
-		--------------------------------------------------
-		-- Mason LSP Setup
-		--------------------------------------------------
-		require("mason-lspconfig").setup({
-			handlers = {
-				function(server_name)
-					local server = servers[server_name] or {}
-					server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+	{
+		"neovim/nvim-lspconfig",
+		dependencies = {
+			{ "mason-org/mason.nvim", opts = {} },
+			"mason-org/mason-lspconfig.nvim",
+			"WhoIsSethDaniel/mason-tool-installer.nvim",
+			{ "j-hui/fidget.nvim", opts = {} },
+			"nvim-telescope/telescope.nvim",
+		},
 
-					require("lspconfig")[server_name].setup(server)
+		config = function()
+			--------------------------------------------------
+			-- LSP Attach (Keymaps + buffer-local config)
+			--------------------------------------------------
+			vim.api.nvim_create_autocmd("LspAttach", {
+				group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
+				callback = function(event)
+					local map = function(keys, func, desc, mode)
+						mode = mode or "n"
+						vim.keymap.set(mode, keys, func, {
+							buffer = event.buf,
+							desc = "LSP: " .. desc,
+						})
+					end
+
+					map("grn", vim.lsp.buf.rename, "Rename")
+					map("<leader>ca", vim.lsp.buf.code_action, "Code Action", { "n", "x" })
+					map("gr", require("telescope.builtin").lsp_references, "References")
+					map("gi", require("telescope.builtin").lsp_implementations, "Implementation")
+					map("gd", require("telescope.builtin").lsp_definitions, "Definition")
+					map("gD", vim.lsp.buf.declaration, "Declaration")
+					map("go", require("telescope.builtin").lsp_document_symbols, "Document Symbols")
+					map("gW", require("telescope.builtin").lsp_dynamic_workspace_symbols, "Workspace Symbols")
+					map("gt", require("telescope.builtin").lsp_type_definitions, "Type Definition")
+					map("gh", vim.lsp.buf.hover, "Hover")
 				end,
-			},
-		})
-	end,
+			})
+
+			--------------------------------------------------
+			-- Capabilities (blink.cmp)
+			--------------------------------------------------
+			local capabilities = require("blink.cmp").get_lsp_capabilities()
+
+			--------------------------------------------------
+			-- LSP Servers
+			--------------------------------------------------
+			local servers = {
+				lua_ls = {
+					settings = {
+						Lua = {
+							completion = { callSnippet = "Replace" },
+							diagnostics = { disable = { "missing-fields" } },
+						},
+					},
+				},
+				tsgo = {},
+			}
+
+			--------------------------------------------------
+			-- Mason Tool Installer
+			--------------------------------------------------
+			require("mason-tool-installer").setup({
+				ensure_installed = vim.tbl_keys(servers),
+			})
+
+			--------------------------------------------------
+			-- Mason LSP Setup
+			--------------------------------------------------
+			require("mason-lspconfig").setup({
+				handlers = {
+					function(server_name)
+						local server = servers[server_name] or {}
+						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+
+						require("lspconfig")[server_name].setup(server)
+					end,
+				},
+			})
+		end,
+	},
 }
