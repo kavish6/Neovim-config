@@ -114,6 +114,3 @@ vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', { noremap = true, silent = true
 
 -- Paste from system clipboard (normal + visual)
 vim.keymap.set({ "n", "v" }, "<leader>p", '"+p', { noremap = true, silent = true })
-
--- Paste from system clipboard (insert mode)
-vim.keymap.set("i", "<leader>p", "<C-r>+", { noremap = true, silent = true })
