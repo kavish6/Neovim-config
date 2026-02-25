@@ -6,9 +6,9 @@ Simple neovim config for typescript environment.
 
 Usage guide:
 
-1. Pull the config in your machine.
+1. Pull the config on your machine.
 2. Add all the files inside it to the `.config` folder of your home directory. 
-3. Folder structure should be **Users/Kavish/.config/nvim** (Replace with your home directory) ->
+3. Folder structure should be `Users/Kavish/.config/nvim` (replace with your home directory) ->
 ```
     init.lua
     lua/
