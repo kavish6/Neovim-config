@@ -3,7 +3,8 @@ return {
 	priority = 1000, -- make sure to load this before all the other start plugins
 	config = function()
 		require("onedark").setup({
-			style = "darker",
+			style = "cool",
+			transparent = true,
 		})
 		require("onedark").load()
 
@@ -12,7 +13,7 @@ return {
 
 		vim.keymap.set("n", "<leader>ts", function()
 			current = current % #styles + 1
-			require("onedark").setup({ style = styles[current] })
+			require("onedark").setup({ style = styles[current], transparent = true })
 			require("onedark").load()
 			print("Theme style:", styles[current])
 		end, { desc = "Toggle OneDark style" })
