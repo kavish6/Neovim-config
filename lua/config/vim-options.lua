@@ -85,7 +85,7 @@ local opts = { noremap = true, silent = true }
 -- Exit insert mode with kj
 keymap("i", "kj", "<Esc>", opts)
 
-keymap("t", "kj", [[<C-\><C-n>]], opts)
+-- keymap("t", "kj", [[<C-\><C-n>]], opts)
 
 -- Close current buffer
 keymap("n", "<leader>c", "<cmd>bdelete<cr>", opts)
@@ -118,5 +118,9 @@ vim.keymap.set({ "n", "v" }, "<leader>p", '"+p', { noremap = true, silent = true
 -- To refresh files updated outside nvim
 vim.o.autoread = true
 vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
-	command = "checktime",
+	callback = function()
+		if vim.fn.getcmdwintype() == "" then
+			vim.cmd("checktime")
+		end
+	end,
 })
