@@ -60,6 +60,8 @@ return {
 			},
 			{ "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Find Buffers" },
 			{ "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Find Help Tags" },
+			{ "<leader>gl", "<cmd>Telescope git_bcommits<CR>", desc = "Git log (this file)" },
+			{ "<leader>gL", "<cmd>Telescope git_commits<CR>", desc = "Git log (all)" },
 		},
 		config = function(_, opts)
 			local actions = require("telescope.actions")

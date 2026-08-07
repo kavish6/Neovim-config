@@ -114,3 +114,9 @@ vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', { noremap = true, silent = true
 
 -- Paste from system clipboard (normal + visual)
 vim.keymap.set({ "n", "v" }, "<leader>p", '"+p', { noremap = true, silent = true })
+
+-- To refresh files updated outside nvim
+vim.o.autoread = true
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
+	command = "checktime",
+})

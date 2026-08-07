@@ -81,7 +81,9 @@ return {
 						},
 					},
 				},
-				tsgo = {},
+				["typescript-language-server"] = {},
+				["python-lsp-server"] = {},
+				black = {},
 			}
 
 			--------------------------------------------------
