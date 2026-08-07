@@ -83,7 +83,6 @@ return {
 				},
 				["typescript-language-server"] = {},
 				["python-lsp-server"] = {},
-				black = {},
 			}
 
 			--------------------------------------------------
@@ -104,6 +103,7 @@ return {
 
 						require("lspconfig")[server_name].setup(server)
 					end,
+					["harper_ls"] = function() end,
 				},
 			})
 		end,

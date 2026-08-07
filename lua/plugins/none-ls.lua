@@ -8,8 +8,6 @@ return {
 	config = function()
 		local null_ls = require("null-ls")
 		local formatting = null_ls.builtins.formatting
-		local diagnostics = null_ls.builtins.diagnostics
-
 		null_ls.setup({
 			sources = {
 				-- Formatters
@@ -37,7 +35,13 @@ return {
 				}),
 
 				formatting.stylua, -- Lua formatting
-
+				formatting.black.with({
+					filetypes = {
+						"python",
+						"py",
+						"python3",
+					},
+				}),
 				-- Linters/Diagnostics (optional)
 				-- diagnostics.eslint_d, -- Fast ESLint
 				-- require("none-ls.diagnostics.eslint_d"), -- Or from none-ls-extras
