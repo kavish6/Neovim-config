@@ -24,7 +24,6 @@ return {
 				"toml",
 				"vim",
 				"vimdoc",
-				"yaml",
 			},
 
 			highlight = {
@@ -34,6 +33,7 @@ return {
 
 			indent = {
 				enable = true,
+				disable = { "yaml" },
 			},
 
 			incremental_selection = {
