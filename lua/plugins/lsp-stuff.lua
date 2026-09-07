@@ -68,42 +68,47 @@ return {
 			-- Capabilities (blink.cmp)
 			--------------------------------------------------
 			local capabilities = require("blink.cmp").get_lsp_capabilities()
+			vim.lsp.config("*", { capabilities = capabilities })
 
 			--------------------------------------------------
 			-- LSP Servers
+			-- (mason-lspconfig v2 dropped `handlers`; per-server config is
+			-- now set via vim.lsp.config and enabled automatically via
+			-- mason-lspconfig's automatic_enable)
 			--------------------------------------------------
-			local servers = {
-				lua_ls = {
-					settings = {
-						Lua = {
-							completion = { callSnippet = "Replace" },
-							diagnostics = { disable = { "missing-fields" } },
-						},
+			vim.lsp.config("lua_ls", {
+				settings = {
+					Lua = {
+						completion = { callSnippet = "Replace" },
+						diagnostics = { disable = { "missing-fields" } },
 					},
 				},
-				["typescript-language-server"] = {},
-				["python-lsp-server"] = {},
-			}
+			})
+
+			vim.lsp.config("ts_ls", {
+				-- default ~4GB V8 heap OOM-crashes (SIGABRT) tsserver on large
+				-- projects (e.g. orca/tarpon, 6000+ ts files), which silently
+				-- breaks go-to-definition/references
+				init_options = {
+					maxTsServerMemory = 12288,
+				},
+			})
+
+			local mason_tools = { "lua_ls", "typescript-language-server", "python-lsp-server" }
 
 			--------------------------------------------------
 			-- Mason Tool Installer
 			--------------------------------------------------
 			require("mason-tool-installer").setup({
-				ensure_installed = vim.tbl_keys(servers),
+				ensure_installed = mason_tools,
 			})
 
 			--------------------------------------------------
 			-- Mason LSP Setup
 			--------------------------------------------------
 			require("mason-lspconfig").setup({
-				handlers = {
-					function(server_name)
-						local server = servers[server_name] or {}
-						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-
-						require("lspconfig")[server_name].setup(server)
-					end,
-					["harper_ls"] = function() end,
+				automatic_enable = {
+					exclude = { "harper_ls" },
 				},
 			})
 		end,
